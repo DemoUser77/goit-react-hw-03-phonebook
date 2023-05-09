@@ -32,11 +32,17 @@ export class App extends React.Component {
   
   };
 
-  onDeleteContact = contactId => {
+  getContacts = () => {
+    const { filter, contacts } = this.state;
+    return contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase))
+  };
+
+  deleteContact = contactId => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== contactId)
     }));
   };
+
 
  onChangeFilter = event => {
     this.setState({ filter: event.currentTarget.value })
@@ -52,8 +58,13 @@ export class App extends React.Component {
         <ContactForm onSubmit={this.addContact } />
 
         <h2>Contacts</h2>
-        <Filter value={ filter} onChange={this.onChangeFilter} />
-        <ContactList  onDeleteContact={this.onDeletContact}/>  
+        <Filter
+          value={filter}
+          onChange={this.onChangeFilter} />
+        
+        <ContactList
+          contacts={this.getContacts}
+          onDeleteContact={this.deleteContact} />  
       
       </Container>
     )
