@@ -63,7 +63,7 @@ export class App extends React.Component {
           onChange={this.onChangeFilter} />
         
         <ContactList
-          contacts={this.getContacts}
+          contacts={this.getContacts()}
           onDeleteContact={this.deleteContact} />  
       
       </Container>
