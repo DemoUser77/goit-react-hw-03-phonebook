@@ -3,7 +3,7 @@ import { ContactForm } from 'components/ContactForm/ContactForm';
 import { ContactList } from 'components/ContactList/ContactList';
 import { Filter } from 'components/Filter/Filter';
 import { Container } from './App.styled';
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 
 
 export class App extends React.Component {
@@ -17,27 +17,16 @@ export class App extends React.Component {
     filter: '',
   };
 
-  addContact = ({ name, number }) => {
-    const contact = {
-      id: nanoid(),
-      name,
-      number,
-    };
-   
-    if (this.state.contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase())) {
+  addContact = contact => {
+    if (this.state.contacts.some(item => (item.name).toLowerCase() === (contact.name).toLowerCase(),)) {
       alert(`${contact.name} is already in contacts.`)
     } else {
       this.setState(({ contacts }) => ({ contacts: [contact, ...contacts] }))
     }
   
   };
-
-  getContacts = () => {
-    const { filter, contacts } = this.state;
-    return contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase))
-  };
-
-  deleteContact = contactId => {
+   
+onDeleteContact = contactId => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== contactId)
     }));
@@ -45,12 +34,14 @@ export class App extends React.Component {
 
 
  onChangeFilter = event => {
-    this.setState({ filter: event.currentTarget.value })
+    this.setState({ filter: event.target.value })
   };
 
 
   render(){
-    const { filter } = this.state;
+    
+     const getContacts = this.state.contacts.filter(contact =>
+    contact.name.toLowerCase().includes(this.state.filter.toLowerCase()));
   
     return (
       <Container>
@@ -59,12 +50,13 @@ export class App extends React.Component {
 
         <h2>Contacts</h2>
         <Filter
-          value={filter}
+          value={this.state.filter}
           onChange={this.onChangeFilter} />
         
         <ContactList
-          contacts={this.getContacts()}
-          onDeleteContact={this.deleteContact} />  
+          contacts={getContacts}
+           onDeleteContact={this.onDeleteContact}  />
+          
       
       </Container>
     )

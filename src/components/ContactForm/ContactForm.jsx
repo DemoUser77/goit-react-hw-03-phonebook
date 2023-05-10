@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Form, Label, Input, Button} from './ContactForm.styled'
-// import { nanoid } from 'nanoid';
+import { nanoid } from 'nanoid';
 
 
 export class ContactForm extends React.Component{
@@ -11,16 +11,23 @@ export class ContactForm extends React.Component{
     };
 
     handleChange = event => {
-        const { name, value } = event.currentTarger;
+        const { name, value } = event.target;
         this.setState({ [name]: value });
     };
 
     handleSubmit = (event) => {
         event.preventDefault();
 
-        this.props.onSubmit(this.state);
-        this.setState({ name: '', number: '' });
-    }
+        const { name, number } = this.state;
+        const newContact = {
+            id: nanoid(),
+            name,
+            number,
+        };
+
+        this.props.onSubmit(newContact);
+        this.setState({ name: '', number: '', });
+    };
 
 
     render() {
@@ -37,7 +44,6 @@ export class ContactForm extends React.Component{
                     onChange={this.handleChange}
                     pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
                     title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-                    
                     required
                     />
                 </Label>
@@ -54,7 +60,6 @@ export class ContactForm extends React.Component{
                    
                     required
                     />
-                       
                 </Label>
 
                 <Button type="submit">Add contact</Button>
