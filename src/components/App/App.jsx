@@ -17,6 +17,21 @@ export class App extends React.Component {
     filter: '',
   };
 
+
+  componentDidMount() {
+    const savedState = localStorage.getItem("contacts");
+
+    if (savedState) {
+      this.setState({contacts: JSON.parse(savedState)})
+    }
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem("contacts", JSON.stringify(this.state.contacts))
+    }
+  };
+
   addContact = contact => {
     if (this.state.contacts.some(item => (item.name).toLowerCase() === (contact.name).toLowerCase(),)) {
       alert(`${contact.name} is already in contacts.`)
